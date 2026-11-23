@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BarberPrime — Gestão & Agendamento Elite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="#top" class="brand" aria-label="BarberPrime">
+        <div class="brand-mark">BP</div>
+        <div>
+          <span class="brand-name">Barber<span>Prime</span></span>
+          <small class="brand-tag">GESTÃO & AGENDAMENTO ELITE</small>
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="#servicos">Serviços</a>
+        <a href="#agendar">Agendar</a>
+        <a href="#loja">Loja</a>
+        <a href="#painel">Painel</a>
+      </nav>
+
+      <div class="topbar-actions">
+        <button type="button" id="open-cart-btn" class="btn-ghost" aria-label="Abrir carrinho">
+          <span>Carrinho</span>
+          <span id="cart-badge" class="badge-count">0</span>
+        </button>
+        <a href="#agendar" class="btn-primary btn-sm">Agendar Agora</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="pill">
+            <span class="dot"></span>
+            <span>Experiência Masculina de Precisão</span>
+          </div>
+          <h1>Estilo, precisão e checkout instantâneo no <span>BarberPrime</span>.</h1>
+          <p class="hero-desc">
+            Agende cortes, barba e combos com barbeiros especialistas, leve produtos selecionados e finalize com <strong>Pix</strong>, <strong>Cartão de Crédito/Débito</strong> ou pagamento no local com confirmação direta no WhatsApp.
+          </p>
+          <div class="hero-cta">
+            <a href="#agendar" class="btn-primary">Montar Meu Agendamento</a>
+            <a href="#loja" class="btn-secondary">Explorar Produtos</a>
+          </div>
+          <div class="hero-metrics">
+            <div class="metric">
+              <strong>4.98 ★</strong>
+              <span>Avaliação dos clientes</span>
+            </div>
+            <div class="metric">
+              <strong>Pix & Cartão</strong>
+              <span>Checkout integrado</span>
+            </div>
+            <div class="metric">
+              <strong>100% Real-Time</strong>
+              <span>Agenda & caixa sincronizados</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-label="Resumo rápido da barbearia">
+          <div class="hero-card-top">
+            <span class="status-chip">ABERTO HOJE • 09:00 – 21:00</span>
+            <span class="mono">55 62 99366-9106</span>
+          </div>
+          <h2>Próximos horários disponíveis</h2>
+          <p class="muted">Escolha um serviço ou selecione direto um horário no formulário abaixo.</p>
+          <div id="quick-slots" class="quick-slots"></div>
+          <div class="hero-card-footer">
+            <div>
+              <small class="muted">Especialistas</small>
+              <strong>Rafael • Lucas • Diego</strong>
+            </div>
+            <a href="#agendar" class="link-green">Ir para agenda →</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="servicos" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">MENU DE SERVIÇOS</span>
+          <h2>Serviços & Combos</h2>
+          <p>Clique para adicionar ou remover do seu agendamento. O tempo e o valor atualizam automaticamente.</p>
+        </div>
+        <div id="services-grid" class="services-grid"></div>
+      </div>
+    </section>
+
+    <section id="agendar" class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">RESERVA & CHECKOUT</span>
+          <h2>Agendar & Finalizar Pagamento</h2>
+          <p>Monte seu atendimento, escolha a data, o horário, o profissional e a forma de pagamento.</p>
+        </div>
+
+        <div class="booking-layout">
+          <form id="booking-form" class="panel booking-form" novalidate>
+            <div class="step-block">
+              <div class="step-header">
+                <span class="step-num">01</span>
+                <h3>Selecione o barbeiro</h3>
+              </div>
+              <div id="barbers-grid" class="barbers-grid"></div>
+            </div>
+
+            <div class="step-block">
+              <div class="step-header">
+                <span class="step-num">02</span>
+                <h3>Data e horário</h3>
+              </div>
+              <div class="date-row">
+                <label class="field">
+                  <span>Data do atendimento</span>
+                  <input type="date" id="booking-date" required />
+                </label>
+                <div class="field">
+                  <span>Horários livres</span>
+                  <div id="times-grid" class="times-grid"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="step-block">
+              <div class="step-header">
+                <span class="step-num">03</span>
+                <h3>Seus dados</h3>
+              </div>
+              <div class="two-cols">
+                <label class="field">
+                  <span>Nome completo *</span>
+                  <input type="text" id="client-name" placeholder="Ex.: Henrique Almeida" required />
+                </label>
+                <label class="field">
+                  <span>WhatsApp *</span>
+                  <input type="tel" id="client-phone" placeholder="Ex.: (62) 99999-0000" required />
+                </label>
+              </div>
+              <label class="field">
+                <span>Observações de estilo (opcional)</span>
+                <input type="text" id="client-notes" placeholder="Ex.: Degradê navalhado baixo, barba alinhada na navalha" />
+              </label>
+            </div>
+
+            <div class="step-block">
+              <div class="step-header">
+                <span class="step-num">04</span>
+                <h3>Forma de pagamento</h3>
+              </div>
+
+              <div class="payment-tabs" role="tablist" aria-label="Métodos de pagamento">
+                <button type="button" class="pay-tab active" data-method="pix" role="tab" aria-selected="true">
+                  <span>⚡ PIX Instantâneo</span>
+                  <small>QR Code + Copia e Cola</small>
+                </button>
+                <button type="button" class="pay-tab" data-method="credit" role="tab" aria-selected="false">
+                  <span>💳 Cartão de Crédito</span>
+                  <small>Até 3x sem juros</small>
+                </button>
+                <button type="button" class="pay-tab" data-method="debit" role="tab" aria-selected="false">
+                  <span>🏧 Cartão de Débito</span>
+                  <small>À vista na confirmação</small>
+                </button>
+                <button type="button" class="pay-tab" data-method="local" role="tab" aria-selected="false">
+                  <span>💈 Pagar na Barbearia</span>
+                  <small>Pix, dinheiro ou maquininha</small>
+                </button>
+              </div>
+
+              <div id="pay-panel-pix" class="pay-box active">
+                <div class="pix-layout">
+                  <div class="qr-frame" aria-label="QR Code Pix">
+                    <svg id="pix-qr-svg" viewBox="0 0 120 120" width="128" height="128"></svg>
+                  </div>
+                  <div class="pix-info">
+                    <span class="mini-label">PIX COPIA E COLA (CHAVE SIMULADA)</span>
+                    <p class="muted">Escaneie o código ou copie a chave para simular a aprovação imediata do pagamento.</p>
+                    <div class="copy-box">
+                      <code id="pix-code">00020126580014BR.GOV.BCB.PIX0136barberprime@pix.local5204000053039865802BR5913BARBERPRIME6007GOIANIA62070503***6304A1B2</code>
+                      <button type="button" id="copy-pix-btn" class="btn-secondary btn-xs">Copiar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="pay-panel-card" class="pay-box">
+                <div class="card-preview-wrap">
+                  <div id="virtual-card" class="virtual-card">
+                    <div class="card-face card-front">
+                      <div class="card-top">
+                        <span id="card-brand-label" class="card-brand">CRÉDITO • VISA/MASTER</span>
+                        <span class="chip-metal"></span>
+                      </div>
+                      <div id="card-number-display" class="card-number mono">•••• •••• •••• ••••</div>
+                      <div class="card-bottom">
+                        <div>
+                          <small>TITULAR</small>
+                          <strong id="card-holder-display">NOME DO CLIENTE</strong>
+                        </div>
+                        <div>
+                          <small>VALIDADE</small>
+                          <strong id="card-expiry-display" class="mono">MM/AA</strong>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-face card-back">
+                      <div class="mag-stripe"></div>
+                      <div class="cvv-strip">
+                        <small>CVV</small>
+                        <span id="card-cvv-display" class="mono">•••</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-fields">
+                  <label class="field">
+                    <span>Número do cartão</span>
+                    <input type="text" id="card-number" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000" />
+                  </label>
+                  <label class="field">
+                    <span>Nome impresso no cartão</span>
+                    <input type="text" id="card-holder" placeholder="COMO ESTÁ NO CARTÃO" />
+                  </label>
+                  <div class="three-cols">
+                    <label class="field">
+                      <span>Validade</span>
+                      <input type="text" id="card-expiry" inputmode="numeric" maxlength="5" placeholder="MM/AA" />
+                    </label>
+                    <label class="field">
+                      <span>CVV</span>
+                      <input type="text" id="card-cvv" inputmode="numeric" maxlength="4" placeholder="123" />
+                    </label>
+                    <label class="field" id="installments-wrap">
+                      <span>Parcelamento</span>
+                      <select id="card-installments">
+                        <option value="1">1x sem juros</option>
+                        <option value="2">2x sem juros</option>
+                        <option value="3">3x sem juros</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div id="pay-panel-local" class="pay-box">
+                <p class="muted">
+                  Sua vaga fica reservada na agenda e o pagamento é feito na recepção (Pix, cartão de crédito/débito ou dinheiro) ao final do atendimento.
+                </p>
+              </div>
+            </div>
+
+            <button type="submit" id="submit-booking-btn" class="btn-primary btn-lg">
+              Confirmar Agendamento e Pagamento
+            </button>
+          </form>
+
+          <aside class="panel summary-sidebar">
+            <h3>Resumo do Pedido</h3>
+            <div class="summary-block">
+              <span class="mini-label">SERVIÇOS SELECIONADOS</span>
+              <ul id="summary-services" class="summary-list"></ul>
+            </div>
+
+            <div class="summary-block">
+              <div class="summary-row-head">
+                <span class="mini-label">ITENS DA LOJA NO CARRINHO</span>
+                <button type="button" id="clear-cart-btn" class="link-muted">Limpar</button>
+              </div>
+              <ul id="summary-cart" class="summary-list"></ul>
+            </div>
+
+            <div class="summary-meta">
+              <div><span>Barbeiro:</span><strong id="summary-barber">Rafael Mendes</strong></div>
+              <div><span>Data & Hora:</span><strong id="summary-datetime">Hoje • 10:00</strong></div>
+              <div><span>Duração estimada:</span><strong id="summary-duration">40 min</strong></div>
+              <div><span>Pagamento:</span><strong id="summary-payment">PIX Instantâneo</strong></div>
+            </div>
+
+            <div class="summary-total">
+              <span>Total a pagar</span>
+              <strong id="summary-total" class="total-highlight">R$ 65,00</strong>
+            </div>
+
+            <div id="receipt-box" class="receipt-box hidden" aria-live="polite"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="loja" class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">BARBER SHOP</span>
+          <h2>Produtos para Cuidado Diário</h2>
+          <p>Adicione pomadas, óleos e balms ao seu pedido e retire na barbearia ou inclua no agendamento.</p>
+        </div>
+        <div id="products-grid" class="products-grid"></div>
+      </div>
+    </section>
+
+    <section id="painel" class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">CONTROLE DO ESTABELECIMENTO</span>
+          <h2>Painel de Gestão & Caixa</h2>
+          <p>Acompanhe agendamentos, faturamento por método de pagamento e status de cada cliente em tempo real.</p>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span>Faturamento Registrado</span>
+            <strong id="kpi-revenue">R$ 0,00</strong>
+          </div>
+          <div class="kpi-card">
+            <span>Agendamentos Ativos</span>
+            <strong id="kpi-bookings">0</strong>
+          </div>
+          <div class="kpi-card">
+            <span>Ticket Médio</span>
+            <strong id="kpi-ticket">R$ 0,00</strong>
+          </div>
+          <div class="kpi-card">
+            <span>Pagos Online (Pix/Cartão)</span>
+            <strong id="kpi-online">0</strong>
+          </div>
+        </div>
+
+        <div class="panel table-panel">
+          <div class="table-toolbar">
+            <h3>Agenda & Pedidos</h3>
+            <div class="filter-group">
+              <button type="button" class="filter-btn active" data-filter="all">Todos</button>
+              <button type="button" class="filter-btn" data-filter="Confirmado">Confirmados</button>
+              <button type="button" class="filter-btn" data-filter="Concluído">Concluídos</button>
+              <button type="button" class="filter-btn" data-filter="Cancelado">Cancelados</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Cliente</th>
+                  <th>Serviços / Itens</th>
+                  <th>Barbeiro & Hora</th>
+                  <th>Pagamento</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>BarberPrime</strong> — Gestão & Agendamento Elite
+      </div>
+      <div class="footer-contact">
+        <span>WhatsApp: 55 62 99366-9106</span>
+        <span>•</span>
+        <span>Desenvolvido por Eugênio Lopes</span>
+      </div>
+    </div>
+  </footer>
+
+  <aside id="cart-drawer" class="cart-drawer hidden" aria-label="Carrinho de compras">
+    <div id="cart-backdrop" class="cart-backdrop"></div>
+    <div class="cart-panel">
+      <div class="cart-header">
+        <h3>Seu Carrinho</h3>
+        <button type="button" id="close-cart-btn" class="icon-btn" aria-label="Fechar carrinho">✕</button>
+      </div>
+      <div id="cart-items-list" class="cart-items-list"></div>
+      <div class="cart-footer">
+        <div class="cart-total-row">
+          <span>Subtotal da loja</span>
+          <strong id="cart-subtotal">R$ 0,00</strong>
+        </div>
+        <a href="#agendar" id="go-to-checkout-btn" class="btn-primary btn-block">Levar para o Checkout</a>
+      </div>
+    </div>
+  </aside>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
